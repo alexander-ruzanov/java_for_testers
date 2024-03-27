@@ -13,7 +13,7 @@ public record Triangle(double a, double b, double c) {
         System.out.println(text);
     }
 
-    private double area() {
+    public double area() {
         double semiperimeter;
         semiperimeter = (a+b+c)/2;
         return sqrt((semiperimeter-a)*(semiperimeter-b)*(semiperimeter-c)*semiperimeter);
