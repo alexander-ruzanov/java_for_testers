@@ -14,9 +14,7 @@ public record Triangle(double a, double b, double c) {
     }
 
     public double area() {
-        double semiperimeter;
-        semiperimeter = (a+b+c)/2;
-        return sqrt((semiperimeter-a)*(semiperimeter-b)*(semiperimeter-c)*semiperimeter);
+        return sqrt((perimeter()/2-a)*(perimeter()/2-b)*(perimeter()/2-c)*perimeter()/2);
     }
     public double perimeter() {
         return a + b + c;
