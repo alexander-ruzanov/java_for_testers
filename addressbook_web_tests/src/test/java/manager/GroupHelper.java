@@ -8,11 +8,7 @@ public class GroupHelper extends HelperBase {
     public GroupHelper (ApplicationManager manager) {
         super(manager);
     }
-
-    public boolean isGroupPresent() {
-        openGroupsPage();
-        return manager.isElementPresent(By.name("selected[]"));
-    }
+    
     public void modifyGroup(GroupData modifiedGroup) {
         openGroupsPage();
         selectGroup();
@@ -77,5 +73,10 @@ public class GroupHelper extends HelperBase {
 
     private void selectGroup() {
         click(By.name("selected[]"));
+    }
+
+    public int getCount() {
+        openGroupsPage();
+        return manager.driver.findElements(By.name("selected[]")).size();
     }
 }
