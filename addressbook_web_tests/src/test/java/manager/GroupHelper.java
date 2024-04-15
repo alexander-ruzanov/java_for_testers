@@ -5,10 +5,10 @@ import org.openqa.selenium.By;
 
 public class GroupHelper extends HelperBase {
 
-    public GroupHelper (ApplicationManager manager) {
+    public GroupHelper(ApplicationManager manager) {
         super(manager);
     }
-    
+
     public void modifyGroup(GroupData modifiedGroup) {
         openGroupsPage();
         selectGroup();
@@ -29,15 +29,17 @@ public class GroupHelper extends HelperBase {
     public void removeGroup() {
         openGroupsPage();
         selectGroup();
-        removeSelectedGroup();
+        removeSelectedGroups();
         returnToGroupsPage();
 
     }
+
     public void openGroupsPage() {
-        if (!manager.isElementPresent(By.name("new"))){
+        if (!manager.isElementPresent(By.name("new"))) {
             click(By.linkText("groups"));
         }
     }
+
     private void submitGroupCreation() {
         click(By.name("submit"));
     }
@@ -47,7 +49,7 @@ public class GroupHelper extends HelperBase {
     }
 
 
-    private void removeSelectedGroup() {
+    private void removeSelectedGroups() {
         click(By.name("delete"));
     }
 
@@ -78,5 +80,18 @@ public class GroupHelper extends HelperBase {
     public int getCount() {
         openGroupsPage();
         return manager.driver.findElements(By.name("selected[]")).size();
+    }
+
+    public void removeAllGroups() {
+        openGroupsPage();
+        selectAllGroups();
+        removeSelectedGroups();
+    }
+
+    private void selectAllGroups() {
+        var checkboxes = manager.driver.findElements(By.name("selected[]"));
+        for (var checkbox : checkboxes) {
+            checkbox.click();
+        }
     }
 }
