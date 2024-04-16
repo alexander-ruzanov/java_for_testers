@@ -2,17 +2,12 @@ package tests;
 
 import model.GroupData;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-
 import org.junit.jupiter.params.provider.MethodSource;
-
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class GroupCreationTests extends TestBase {
-
 
     public static List<GroupData> groupProvider() {
         var result = new ArrayList<GroupData>();

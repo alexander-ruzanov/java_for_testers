@@ -43,8 +43,16 @@ public class ContactHelper extends HelperBase {
     private void removeSelectedContact() {
         click(By.xpath("//input[@value='Delete']"));
     }
-    public boolean isContactPresent() {
+    public int getCount() {
         openHomePage();
-        return manager.isElementPresent(By.name("selected[]"));
+        return manager.driver.findElements(By.name("selected[]")).size();
+    }
+    private void selectAllContacts() {
+        click(By.id("MassCB"));
+    }
+    public void removeAllContacts() {
+        openHomePage();
+        selectAllContacts();
+        removeSelectedContact();
     }
 }
