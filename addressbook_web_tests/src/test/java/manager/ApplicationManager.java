@@ -7,12 +7,17 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.util.Properties;
+
 public class ApplicationManager {
     protected WebDriver driver;
     private LoginHelper session;
     private GroupHelper groups;
     private ContactHelper contacts;
-    public void init(String browser) {
+
+    private Properties properties;
+    public void init(String browser, Properties properties) {
+        this.properties = properties;
         if (driver == null) {
             if ("chrome".equals(browser)){
                 driver = new ChromeDriver();
@@ -21,9 +26,9 @@ public class ApplicationManager {
             } else {throw new IllegalArgumentException(String.format("Unknown browser %s", browser));}
 
             Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
-            driver.get("http://localhost/addressbook/");
+            driver.get(properties.getProperty("web.baseUrl"));
             driver.manage().window().setSize(new Dimension(1022, 802));
-            session().login("admin", "secret");
+            session().login(properties.getProperty("web.username"), properties.getProperty("web.password"));
         }
     }
 
