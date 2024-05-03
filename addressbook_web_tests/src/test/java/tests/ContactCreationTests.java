@@ -47,19 +47,23 @@ public class ContactCreationTests extends TestBase {
                 new ContactData("", "contact name'", "", "", "", "", "")));
         return result;
     }
-
+    public static List<ContactData> singleRandomContact() {
+        return List.of(new ContactData().withFirstName(CommonFunctions.randomString(10))
+                .withLastName(CommonFunctions.randomString(20))
+                .withAddress(CommonFunctions.randomString(30)));
+    }
     @ParameterizedTest
-    @MethodSource("contactProvider")
-    public void canCreateMultipleContacts(ContactData contact) {
-        var oldContacts = app.contacts().getList();
+    @MethodSource("singleRandomContact")
+    public void canCreateContact(ContactData contact) {
+        var oldContacts = app.hbm().getContactList();
         app.contacts().createContact(contact);
-        var newContacts = app.contacts().getList();
+        var newContacts = app.hbm().getContactList();
         Comparator<ContactData> compareById = (o1, o2) -> {
             return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
         };
         newContacts.sort(compareById);
         var expectedList = new ArrayList<>(oldContacts);
-        expectedList.add(contact.withId(newContacts.get(newContacts.size() - 1).id()).withFirstName(contact.firstname()).withLastName(contact.lastname()).withAddress(""));
+        expectedList.add(contact.withId(newContacts.get(newContacts.size() - 1).id()));
         expectedList.sort(compareById);
         Assertions.assertEquals(newContacts, expectedList);
     }

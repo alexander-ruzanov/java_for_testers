@@ -13,7 +13,7 @@ public class GroupRemovalTests extends TestBase {
     @Test
     public void canRemoveGroup() {
         if (app.hbm().getGroupCount() == 0){
-            app.hbm().createGroup(new GroupData("", "", "", ""));
+            app.hbm().createGroup(new GroupData("", "group name", "group header", "group footer"));
         }
 
         var oldGroups = app.hbm().getGroupList();
