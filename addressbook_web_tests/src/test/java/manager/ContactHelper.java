@@ -1,7 +1,9 @@
 package manager;
 
 import model.ContactData;
+import model.GroupData;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,49 +13,69 @@ public class ContactHelper extends HelperBase {
         super(manager);
     }
 
+    public void createContact(ContactData contact, GroupData group) {
+        initContactCreation();
+        fillContactForm(contact);
+        selectGroup(group);
+        submitContactCreation();
+        openHomePage();
+    }
+
+    public void selectGroup(GroupData group) {
+        new Select(manager.driver.findElement(By.name("new_group"))).selectByValue(group.id());
+    }
+
     public void createContact(ContactData contact) {
         initContactCreation();
         fillContactForm(contact);
         submitContactCreation();
         openHomePage();
     }
+
     public void removeContact(ContactData contact) {
         selectContact(contact);
         removeSelectedContact();
         openHomePage();
     }
+
     public void openHomePage() {
-        if (!manager.isElementPresent(By.name("selected[]"))) {
-            click(By.linkText("home"));
-        }
+            click(By.id("logo"));
     }
+
     public void initContactCreation() {
         click(By.linkText("add new"));
     }
+
     private void fillContactForm(ContactData contact) {
         type(By.name("firstname"), contact.firstname());
         type(By.name("lastname"), contact.lastname());
         type(By.name("address"), contact.address());
         type(By.name("home"), contact.home());
         type(By.name("email"), contact.email());
-  //      attach(By.name("photo"), contact.photo());
+        //      attach(By.name("photo"), contact.photo());
     }
+
     private void submitContactCreation() {
         click(By.name("submit"));
     }
+
     private void selectContact(ContactData contact) {
         click(By.cssSelector(String.format("input[value='%s']", contact.id())));
     }
+
     private void removeSelectedContact() {
         click(By.xpath("//input[@value='Delete']"));
     }
+
     public int getCount() {
         openHomePage();
         return manager.driver.findElements(By.name("selected[]")).size();
     }
+
     private void selectAllContacts() {
         click(By.id("MassCB"));
     }
+
     public void removeAllContacts() {
         openHomePage();
         selectAllContacts();
@@ -86,7 +108,39 @@ public class ContactHelper extends HelperBase {
     private void initContactModification(ContactData contact) {
         click(By.xpath(String.format("//a[@href='edit.php?id=%s']", contact.id())));
     }
+
     private void submitContactModification() {
         click(By.name("update"));
+    }
+
+    public void addContactToGroup(ContactData contact, GroupData group) {
+        openHomePage();
+        selectContact(contact);
+        selectGroupOnHomePage(group);
+        addToGroup();
+        openHomePage();
+    }
+
+    public void addToGroup() {
+        click(By.xpath("//input[@value=\'Add to\']"));
+    }
+
+    public void selectGroupOnHomePage(GroupData group) {
+        new Select(manager.driver.findElement(By.name("to_group"))).selectByValue(group.id());
+    }
+
+    public void removeContactFromGroup(ContactData contact, GroupData group) {
+        openHomePage();
+        selectGroupsOnHomePage(group);
+        selectContact(contact);
+        initRemoveContactFromGroup();
+        openHomePage();
+    }
+
+    public void initRemoveContactFromGroup() {
+        click(By.name("remove"));
+    }
+    public void selectGroupsOnHomePage(GroupData group) {
+        new Select(manager.driver.findElement(By.name("group"))).selectByValue(group.id());
     }
 }

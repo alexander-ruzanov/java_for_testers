@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import common.CommonFunctions;
 import model.ContactData;
+import model.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 
 public class ContactCreationTests extends TestBase {
 
@@ -76,4 +78,41 @@ public class ContactCreationTests extends TestBase {
         var newContacts = app.contacts().getList();
         Assertions.assertEquals(oldContacts, newContacts);
     }
+    @Test
+    void canCreateContactInGroup(){
+        var contact = new ContactData()
+                .withFirstName(CommonFunctions.randomString(10))
+                .withLastName(CommonFunctions.randomString(10))
+                .withPhoto(randomFile("src/test/resources/images"));
+        if (app.hbm().getGroupCount() == 0){
+            app.hbm().createGroup(new GroupData("", "group name", "group header", "group footer"));
+        }
+        var group = app.hbm().getGroupList().get(0);
+        var oldRelated = app.hbm().getContactsInGroup(group);
+        app.contacts().createContact(contact, group);
+        var newRelated = app.hbm().getContactsInGroup(group);
+        Assertions.assertEquals(oldRelated.size() + 1, newRelated.size());
+    }
+    @Test
+    void canAddContactToGroup(){
+        if (app.hbm().getGroupCount() == 0){
+            app.groups().createGroup(new GroupData("", "group name", "group header", "group footer"));
+        }
+        if (app.hbm().getContactCount() == 0) {
+            app.contacts().createContact(new ContactData("", "contact name", "", "", "", "", ""));
+        }
+        var allContacts = app.hbm().getContactList();
+        var rnd = new Random();
+        var index = rnd.nextInt(allContacts.size());
+        var contact = allContacts.get(index);
+        var group = app.hbm().getGroupList().get(0);
+        if (app.hbm().getContactsInGroup(group).contains(contact)){
+            app.contacts().removeContactFromGroup(contact, group);
+        }
+        var oldRelated = app.hbm().getContactsInGroup(group);
+        app.contacts().addContactToGroup(contact, group);
+        var newRelated = app.hbm().getContactsInGroup(group);
+        Assertions.assertEquals(oldRelated.size() + 1, newRelated.size());
+    }
+
 }
