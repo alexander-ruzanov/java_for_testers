@@ -11,7 +11,7 @@ public class ContactModificationTests extends TestBase {
     @Test
     void canModifyContact(){
         if (app.hbm().getContactCount() == 0){
-            app.contacts().createContact(new ContactData("", "", "", "", "", "", ""));
+            app.contacts().createContact(new ContactData("", "", "", "", "", "", "", "", "", "", "", ""));
         }
         var oldContacts = app.hbm().getContactList();
         var rnd = new Random();

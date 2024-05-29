@@ -28,6 +28,7 @@ public class ContactRecord {
     public String email2 = "";
     public String email3 = "";
     public String homepage = "";
+    public String phone2 = "";
 
     @ManyToMany
     @JoinTable(name = "address_in_groups", joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "id"))
@@ -39,5 +40,6 @@ public class ContactRecord {
         this.firstname = firstname;
         this.lastname = lastname;
         this.address = address;
+
     }
 }

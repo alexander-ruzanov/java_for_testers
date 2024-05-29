@@ -46,7 +46,7 @@ public class ContactCreationTests extends TestBase {
     }
     public static List<ContactData> negativeContactProvider() {
         var result = new ArrayList<ContactData>(List.of(
-                new ContactData("", "contact name'", "", "", "", "", "")));
+                new ContactData("", "contact name'", "", "", "", "", "", "", "", "", "", "")));
         return result;
     }
     public static List<ContactData> singleRandomContact() {
@@ -99,7 +99,7 @@ public class ContactCreationTests extends TestBase {
             app.groups().createGroup(new GroupData("", "group name", "group header", "group footer"));
         }
         if (app.hbm().getContactCount() == 0) {
-            app.contacts().createContact(new ContactData("", "contact name", "", "", "", "", ""));
+            app.contacts().createContact(new ContactData("", "contact name", "", "", "", "", "", "", "", "", "", ""));
         }
         var allContacts = app.hbm().getContactList();
         var rnd = new Random();
